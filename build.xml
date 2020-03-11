@@ -8,7 +8,7 @@
         <exec executable="sudo" failonerror="true">
 			<arg value="systemctl"/>
 			<arg value="restart"/>
-			<arg value="${run.service.odoo}"/>
+			<arg value="${run.service.odoo.name}"/>
 		</exec>
         <exec executable="systemctl">
 			<arg value="status"/>

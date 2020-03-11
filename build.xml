@@ -5,11 +5,11 @@
     <property file = "build.properties"/>
 
     <target name="restart-odoo" depends="restart-postgres">
-        <exec executable="sudo" failonerror="true">
+<!--         <exec executable="sudo" failonerror="true">
 			<arg value="systemctl"/>
 			<arg value="restart"/>
 			<arg value="${run.service.odoo.name}"/>
-		</exec>
+		</exec> -->
         <exec executable="systemctl">
 			<arg value="status"/>
 			<arg value="${run.service.odoo.name}"/>
@@ -17,11 +17,11 @@
     </target>
 
     <target name="restart-postgres">
-        <exec executable="sudo" failonerror="true">
+<!--         <exec executable="sudo" failonerror="true">
 			<arg value="systemctl"/>
 			<arg value="restart"/>
 			<arg value="${run.service.odoo.name}"/>
-		</exec>
+		</exec> -->
         <exec executable="systemctl">
 			<arg value="status"/>
 			<arg value="${run.service.odoo.name}"/>

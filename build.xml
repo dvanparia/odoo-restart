@@ -51,21 +51,21 @@
 	<!-- Restart postgres service -->
     <target name="restart-postgres">
 		<echo>Restarting Service Postgres</echo>
-		<exec executable="sudo" failonerror="true">
+		<exec executable="sudo">
 			<arg value="systemctl"/>
 			<arg value="stop"/>
-			<arg value="${run.service.odoo.name}"/>
+			<arg value="${run.service.postgres.name}"/>
 		</exec>
         <exec executable="sudo" failonerror="true">
 			<arg value="systemctl"/>
 			<arg value="start"/>
-			<arg value="${run.service.odoo.name}"/>
+			<arg value="${run.service.postgres.name}"/>
 		</exec>
         <exec executable="systemctl">
 			<arg value="status"/>
-			<arg value="${run.service.odoo.name}"/>
+			<arg value="${run.service.postgres.name}"/>
 		</exec>
     </target>
-
+	
 
 </project>

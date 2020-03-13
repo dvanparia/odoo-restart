@@ -7,11 +7,13 @@
 
 	<!-- Starts odoo service back to normal -->
     <target name="start-odoo" depends="stop-odoo, restart-postgres">
+		<echo>Starting Service Odoo</echo>
         <exec executable="sudo" failonerror="true">
 			<arg value="systemctl"/>
 			<arg value="start"/>
 			<arg value="${run.service.odoo.name}"/>
 		</exec>
+		<echo>Odoo Service Status</echo>
         <exec executable="systemctl">
 			<arg value="status"/>
 			<arg value="${run.service.odoo.name}"/>
@@ -20,15 +22,18 @@
 
 	<!-- Stops running odoo service and checks if any process still running on -->
 	<target name="stop-odoo">
+		<echo>Stopping Service Odoo</echo>
         <exec executable="sudo">
 			<arg value="systemctl"/>
 			<arg value="stop"/>
 			<arg value="${run.service.odoo.name}"/>
 		</exec>
+		<echo>Odoo Service Status</echo>
         <exec executable="systemctl">
 			<arg value="status"/>
 			<arg value="${run.service.odoo.name}"/>
 		</exec>
+		<echo>Killing if any odoo process remains to stop</echo>
 		<exec executable="sudo">
 			<arg value="pkill"/>
 			<arg value="-f"/>
@@ -43,6 +48,7 @@
 
 	<!-- Restart postgres service -->
     <target name="restart-postgres">
+		<echo>Restarting Service Odoo</echo>
         <exec executable="sudo" failonerror="true">
 			<arg value="systemctl"/>
 			<arg value="restart"/>

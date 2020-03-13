@@ -4,6 +4,14 @@
 
 	<!-- Importing properties file -->
     <property file = "build.properties"/>
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+
+	<!-- Generatring timestamp for extracting logs  -->
+		<tstamp>
+			<format property="datetime_start"
+				pattern="yyyy-MM-d HH:mm:ss"
+				timezone="UTC"/>
+		</tstamp>
 
 	<!-- Starts odoo service back to normal -->
     <target name="start-odoo" depends="stop-odoo, restart-postgres">
@@ -18,6 +26,7 @@
 			<arg value="status"/>
 			<arg value="${run.service.odoo.name}"/>
 		</exec>
+		<antcall target="print-restart-logs"/>
     </target>
 
 	<!-- Stops running odoo service and checks if any process still running on -->
@@ -66,6 +75,33 @@
 			<arg value="${run.service.postgres.name}"/>
 		</exec>
     </target>
+
+	<!-- Prints logs of odoo to check if server actually restarts or not -->
+	<target name="print-restart-logs" depends="test-if-running">
+		<echo>${datetime_start}</echo>
+		<exec executable="sudo">
+			<arg line="sed -n &apos;/${datetime_start}/,$p&apos; ${run.dir.logfile}"/>
+		</exec>
+	</target>
+
+	<!-- Run test on server if http response is positive or not -->
+	<target name="test-if-running">
+		<waitfor maxwait="${run.max.wait}" maxwaitunit="second"
+                checkevery="1" checkeveryunit="second"
+				timeoutproperty="server.run.fail">
+				<http url="${run.domain}"/>
+    	</waitfor>
+			<if>
+				<not><isset property="server.run.fail"/></not>
+				<then>
+					<echo>Server starts successfully</echo>
+				</then>
+				<else>
+					<fail message="Server did not come up. Please check your log files and try again."/>
+				</else>
+			</if>
+	</target>
+
 	
 
 </project>

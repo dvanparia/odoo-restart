@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="Odoo Auto Deploy" default="start-odoo">
+<project name="Odoo Restart" default="start-odoo">
 
 	<!-- Importing properties file -->
     <property file = "build.properties"/>
@@ -47,29 +47,19 @@
 			<arg value="pkill"/>
 			<arg value="-f"/>
 			<arg value="-e"/>
-			<arg value="odoo"/>
-		</exec>
-		<exec executable="sudo">
-			<arg value="pkill"/>
-			<arg value="-f"/>
-			<arg value="-e"/>
-			<arg value="${run.service.odoo.name}"/>
+			<arg value="${run.server.filename}"/>
 		</exec>
     </target>
 
 	<!-- Restart postgres service -->
     <target name="restart-postgres">
 		<echo>Restarting Service Postgres</echo>
-		<exec executable="sudo">
-			<arg value="systemctl"/>
-			<arg value="stop"/>
-			<arg value="${run.service.postgres.name}"/>
-		</exec>
         <exec executable="sudo" failonerror="true">
 			<arg value="systemctl"/>
-			<arg value="start"/>
+			<arg value="restart"/>
 			<arg value="${run.service.postgres.name}"/>
 		</exec>
+		<sleep seconds="3"/>
         <exec executable="systemctl">
 			<arg value="status"/>
 			<arg value="${run.service.postgres.name}"/>
@@ -103,5 +93,4 @@
 	</target>
 
 	
-
 </project>

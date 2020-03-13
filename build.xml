@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="Odoo Auto Deploy" default="restart-odoo">
+<project name="Odoo Auto Deploy" default="start-odoo">
 
+	<!-- Importing properties file -->
     <property file = "build.properties"/>
 
-    <target name="restart-odoo" depends="restart-postgres">
+	<!-- Starts odoo service back to normal -->
+    <target name="start-odoo" depends="stop-odoo, restart-postgres">
         <exec executable="sudo" failonerror="true">
 			<arg value="systemctl"/>
-			<arg value="restart"/>
+			<arg value="start"/>
 			<arg value="${run.service.odoo.name}"/>
 		</exec>
         <exec executable="systemctl">
@@ -16,6 +18,30 @@
 		</exec>
     </target>
 
+	<!-- Stops running odoo service and checks if any process still running on -->
+	<target name="stop-odoo">
+        <exec executable="sudo">
+			<arg value="systemctl"/>
+			<arg value="stop"/>
+			<arg value="${run.service.odoo.name}"/>
+		</exec>
+        <exec executable="systemctl">
+			<arg value="status"/>
+			<arg value="${run.service.odoo.name}"/>
+		</exec>
+		<exec executable="sudo">
+			<arg value="pkill"/>
+			<arg value="-f"/>
+			<arg value="odoo"/>
+		</exec>
+		<exec executable="sudo">
+			<arg value="pkill"/>
+			<arg value="-f"/>
+			<arg value="${run.service.odoo.name}"/>
+		</exec>
+    </target>
+
+	<!-- Restart postgres service -->
     <target name="restart-postgres">
         <exec executable="sudo" failonerror="true">
 			<arg value="systemctl"/>

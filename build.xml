@@ -48,7 +48,7 @@
 
 	<!-- Restart postgres service -->
     <target name="restart-postgres">
-		<echo>Restarting Service Odoo</echo>
+		<echo>Restarting Service Postgres</echo>
         <exec executable="sudo" failonerror="true">
 			<arg value="systemctl"/>
 			<arg value="restart"/>

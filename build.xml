@@ -37,11 +37,13 @@
 		<exec executable="sudo">
 			<arg value="pkill"/>
 			<arg value="-f"/>
+			<arg value="-e"/>
 			<arg value="odoo"/>
 		</exec>
 		<exec executable="sudo">
 			<arg value="pkill"/>
 			<arg value="-f"/>
+			<arg value="-e"/>
 			<arg value="${run.service.odoo.name}"/>
 		</exec>
     </target>
@@ -49,9 +51,14 @@
 	<!-- Restart postgres service -->
     <target name="restart-postgres">
 		<echo>Restarting Service Postgres</echo>
+		<exec executable="sudo" failonerror="true">
+			<arg value="systemctl"/>
+			<arg value="stop"/>
+			<arg value="${run.service.odoo.name}"/>
+		</exec>
         <exec executable="sudo" failonerror="true">
 			<arg value="systemctl"/>
-			<arg value="restart"/>
+			<arg value="start"/>
 			<arg value="${run.service.odoo.name}"/>
 		</exec>
         <exec executable="systemctl">

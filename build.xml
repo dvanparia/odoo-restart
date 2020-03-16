@@ -14,7 +14,7 @@
 		</tstamp>
 
 	<!-- Starts odoo service back to normal -->
-    <target name="start-odoo" depends="stop-odoo, restart-postgres">
+    <target name="start-odoo" depends="stop-odoo">
 		<echo>Starting Service Odoo</echo>
         <exec executable="sudo" failonerror="true">
 			<arg value="systemctl"/>
@@ -49,9 +49,16 @@
 			<arg value="-e"/>
 			<arg value="${run.server.filename}"/>
 		</exec>
+		<!-- Call target 'restart-postgres' if parameter is set -->
+		<if>
+			<equals arg1="${Restart_PostgreSQL}" arg2="true"/>
+			<then>
+				<antcall target="restart-postgres"/>
+			</then>
+		</if>
     </target>
 
-	<!-- Restart postgres service -->
+	<!-- Restart postgres service if enabled from parameter -->
     <target name="restart-postgres">
 		<echo>Restarting Service Postgres</echo>
         <exec executable="sudo" failonerror="true">
@@ -92,5 +99,5 @@
 			</if>
 	</target>
 
-	
+
 </project>
